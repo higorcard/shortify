@@ -29,10 +29,10 @@
 					<h1 class="text-body-emphasis fw-bolder" style="margin-top: 5rem;">Shorten link</h1>
 					<p class="fs-5 text-muted">Track link stats with ease using <code class="text-primary fw-bold">Shortify</code>!</p>
 					
-					<div class="d-flex w-100 gap-2 mt-5 flex-md-row flex-column">
-						<input type="text" class="form-control px-4 rounded-pill" style="font-size: 1.25rem;" id="exampleFormControlInput1" placeholder="your-link.com">
-						<button class="btn btn-primary btn-lg text-white text-center align-items-center px-4 rounded-pill" type="button">Shorten!</button>
-					</div>
+					<form id="shorten-form" class="d-flex w-100 gap-2 mt-5 flex-md-row flex-column" method="POST" action="<?= $_SERVER['PHP_SELF'] ?>">
+						<input type="text" class="form-control px-4 rounded-pill" style="font-size: 1.25rem;" placeholder="your-link.com" required>
+						<button class="btn btn-primary btn-lg text-white text-center align-items-center px-4 rounded-pill" type="submit">Shorten!</button>
+					</form>
 				</div>
 			</div>
 		</div>
@@ -49,19 +49,12 @@
 					<h1 class="text-body-emphasis fw-bolder" style="margin-top: 5rem;">Track link</h1>
 					<p class="fs-5 text-muted">Track link stats with ease using <code class="text-primary fw-bold">Shortify</code>!</p>
 
-					<div class="d-flex w-100 gap-2 mt-5 flex-md-row flex-column">
-						<input type="text" class="form-control px-4 rounded-pill" style="font-size: 1.25rem;" id="exampleFormControlInput1" placeholder="shortify.com.br/link-shortened">
-						<button class="btn btn-primary btn-lg text-white text-center align-items-center px-4 rounded-pill" type="button">Track!</button>
-					</div>
+					<form id="track-form" class="d-flex w-100 gap-2 mt-5 flex-md-row flex-column" method="POST" action="<?= $_SERVER['PHP_SELF'] ?>">
+						<input type="text" class="form-control px-4 rounded-pill" style="font-size: 1.25rem;" placeholder="short-code" minlength="6" maxlength="6" required>
+						<button class="btn btn-primary btn-lg text-white text-center align-items-center px-4 rounded-pill" type="submit">Track!</button>
+					</form>
 
-					<div class="d-flex align-items-start flex-column w-100 mt-5">
-						<a class="fs-4 mb-1" href="shortify.com.br/SU3FQ2">shortify.com.br/<b>SU3FQ2</b></a>
-
-						<div class="d-flex justify-content-between w-100">
-							<p class="text-secondary">https://your-link.com</p>
-							<p class="text-secondary">4 redirects</p>
-						</div>
-					</div>
+					<div id="track-link"></div>
 				</div>
 			</div>
 		</div>

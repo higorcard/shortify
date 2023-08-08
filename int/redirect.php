@@ -1,5 +1,4 @@
 <?php
-
 	require_once 'config.php';
 
 	if($_GET['link_code']) {
@@ -21,5 +20,3 @@
 			header('Location: ../');
 		}
 	}
-
-?>
