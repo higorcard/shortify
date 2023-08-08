@@ -1,9 +1,3 @@
-<?php
-
-	require_once 'int/config.php';
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -27,7 +21,7 @@
 			<div class="row p-3 text-center justify-content-center">
 				<div class="col-xl-6 col-lg-8 col-md-12 col-sm-12 position-relative bg-body-tertiary rounded-4 p-5">
 					<div class="d-flex align-items-center position-absolute top-0 start-0 mt-4 ms-4">
-						<img src="repository-logo.png" style="width: 28px; heigth: 28px;">
+						<img src="assets/img/repository-logo.png" style="width: 28px; heigth: 28px;">
 						<h4 class="text-primary m-0 ms-2">Shortify</h4>
 					</div>
 					<button class="btn btn-link position-absolute top-0 end-0 mt-4 me-4 p-0" style="font-size: 1.25rem;">track</button>
@@ -47,7 +41,7 @@
 			<div class="row p-3 text-center justify-content-center">
 				<div class="col-xl-6 col-lg-8 col-md-12 col-sm-12 position-relative bg-body-tertiary rounded-4 p-5">
 					<div class="d-flex align-items-center position-absolute top-0 start-0 mt-4 ms-4">
-						<img src="repository-logo.png" style="width: 28px; heigth: 28px;">
+						<img src="assets/img/repository-logo.png" style="width: 28px; heigth: 28px;">
 						<h4 class="text-primary m-0 ms-2">Shortify</h4>
 					</div>
 					<button class="btn btn-link position-absolute top-0 end-0 mt-4 me-4 p-0" style="font-size: 1.25rem;">shorten</button>
