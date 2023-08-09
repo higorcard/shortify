@@ -1,12 +1,22 @@
 const absolutePath = window.location.origin;
 
-$(window).ready(function() {
-	$("#track-flip").click(function() {
-		$("#card").addClass("flipped");
-	});
+function showAlert(message) {
+	if(!$('body').find('.alert').length) {
+		$('body').prepend("<div class='position-fixed z-3 bottom-0 start-50 translate-middle-x mt-3 row alert text-bg-primary shake-animation' role='alert'>" + message + "</div>");
 
-	$("#shorten-flip").click(function() {
-		$("#card").removeClass("flipped");
+		hideAlert();
+	}
+}
+
+function hideAlert() {
+	$(".alert").delay(3000).fadeTo(800, 0, function() {
+		$(this).alert('close');
+	});
+}
+
+$(window).ready(function() {
+	$(".flip-button").click(function() {
+		$("#card").toggleClass("flipped");
 	});
 	
 	$('#shorten-form').submit(function(e) {
@@ -27,6 +37,8 @@ $(window).ready(function() {
 
 			inputUrl.val('');
 
+			showAlert('Shortened link created!');
+
 			$("#copyLink").click(function() {
 				var textToCopy = $("#finalLink").attr('href');
 		
@@ -38,15 +50,7 @@ $(window).ready(function() {
 		
 				tempInput.remove();
 
-				if(!$('body').find('.alert').length) {
-					$('body').prepend("<div class='position-fixed z-3 bottom-0 start-50 translate-middle-x mt-3 row alert text-bg-primary shake-animation' role='alert'>Copied link!</div>");
-					
-					$('.alert').css("animation", "shake .8s");
-					
-					$(".alert").delay(3000).fadeTo(800, 0, function() {
-						$(this).alert('close');
-					});
-				}
+				showAlert('Copied link!');
 			});
 		}).fail(function() {
 			$('#shorten-code').html("<div class='d-flex justify-content-center text-center w-100 mt-5'><p class='text-danger fs-5 m-0'>Fail to shorten :/</p></div>");
@@ -66,6 +70,8 @@ $(window).ready(function() {
 				link_code: linkCode,
 			}),
 		}).done(function(link) {
+			showAlert('Tracked link!');
+
 			if(link['redirectsTotal'] > 1) {
 				var redirectsTotal = link['redirectsTotal'] + ' redirects';
 			} else {
@@ -82,7 +88,7 @@ $(window).ready(function() {
 				});
 			}
 		}).fail(function() {
-			$('#track-link').html("<div class='d-flex justify-content-center text-center w-100 mt-5'><p class='text-secondary fs-5 m-0'>Short link not found :(</p></div>");
+			$('#track-link').html("<div class='d-flex justify-content-center text-center w-100 mt-5'><p class='text-danger fs-5 m-0'>Short link not found :(</p></div>");
 		});
 	});
 });
