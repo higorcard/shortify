@@ -15,14 +15,18 @@
 		$link = $sql->fetch(PDO::FETCH_ASSOC);
 		
 		if($sql->rowCount() > 0) {
-			$sql = $pdo->prepare("SELECT COUNT(id) count FROM redirects WHERE link_id = :l_i");
+			$sql = $pdo->prepare("SELECT * FROM redirects WHERE link_id = :l_i ORDER BY redirects.redirected_at DESC");
 			$sql->bindValue(':l_i', $link['id']);
 			$sql->execute();
 
-			$redirectTotal = $sql->fetch(PDO::FETCH_ASSOC)['count'];
+			$redirects = $sql->fetchAll(PDO::FETCH_ASSOC);
 
-			$link['redirects'] = $redirectTotal;
-			$link['created_at'] = date('M d, Y', strtotime($link['created_at']));
+			$link['redirectsTotal'] = count($redirects);
+			$link['created_at'] = date('M d, Y - H:i', strtotime($link['created_at']));
+
+			foreach($redirects as $redirect) {
+				$link['redirects'][] = [date('H:i', strtotime($redirect['redirected_at'])), date('M d, Y', strtotime($redirect['redirected_at']))];
+			}
 
 			echo json_encode($link);
 		}
