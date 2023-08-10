@@ -1,4 +1,71 @@
-<?php require_once 'partials/header.php'; ?>
+<?php
+	session_start();
+
+	require_once 'int/config.php';
+
+	if($_SESSION['user_id']) {
+		header('Location: /');
+	}
+
+	if(isset($_GET['fail-sign-in'])) {
+		echo "<div class='position-fixed z-3 bottom-0 start-50 translate-middle-x mt-3 row alert text-bg-danger shake-animation' role='alert'>E-mail or password incorrect!</div>";
+	} elseif(isset($_GET['fail-sign-up'])) {
+		echo "<div class='position-fixed z-3 bottom-0 start-50 translate-middle-x mt-3 row alert text-bg-warning shake-animation' role='alert'>Username or e-mail already in use :(</div>";
+	}
+	
+	if(isset($_POST['sign-in'], $_POST['email'], $_POST['password'])) {
+		$email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+		$password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
+
+		$sql = $pdo->prepare("SELECT * FROM users WHERE email = :e");
+		$sql->bindValue(':e', $email);
+		$sql->execute();
+
+		$user = $sql->fetch(PDO::FETCH_ASSOC);
+		
+		if($sql->rowCount() > 0 && password_verify($password, $user['password'])) {
+			$_SESSION['user_id'] = $user['id'];
+			
+			header('Location: ../?logged');
+		} else {
+			header('Location: ?fail-sign-in');
+		}
+	}
+	
+	if(isset($_POST['sign-up'], $_POST['username'], $_POST['email'], $_POST['password'])) {
+		$username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_SPECIAL_CHARS);
+		$email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+		$password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
+		$password = password_hash($password, PASSWORD_DEFAULT);
+
+		$sql = $pdo->prepare("SELECT * FROM users WHERE username = :u OR email = :e");
+		$sql->bindValue(':u', $username);
+		$sql->bindValue(':e', $email);
+		$sql->execute();
+
+		$user = $sql->fetch(PDO::FETCH_ASSOC);
+
+		if($sql->rowCount() == 0) {
+			$sql = $pdo->prepare("INSERT INTO users (username, email, password) VALUES (:u, :e, :p)");
+			$sql->bindValue(':u', $username);
+			$sql->bindValue(':e', $email);
+			$sql->bindValue(':p', $password);
+			$sql->execute();
+
+			if($sql->rowCount() > 0) {
+				$_SESSION['user_id'] = $pdo->lastInsertId();
+				
+				header('Location: ../?registered');
+			}
+		} elseif($user['username'] == $username) {
+			header('Location: ?fail-username');
+		} elseif($user['email'] == $email) {
+			header('Location: ?fail-email');
+		}
+	}
+
+	require_once 'partials/header.php';
+?>
 
 <div class="container mt-5">
 	<div class="row p-3 text-center justify-content-center flip-card" id="card">
@@ -9,7 +76,7 @@
 			</div>
 
 			<div class="d-flex align-items-center position-absolute top-0 end-0 mt-4 me-4">
-				<a class="btn btn-link me-3 p-0 flip-button" href="index.php" style="font-size: 1.25rem;">home</a>
+				<a class="btn btn-link me-3 p-0" href="index.php" style="font-size: 1.25rem;">home</a>
 				<button class="btn btn-link p-0 flip-button" style="font-size: 1.25rem;">sign up</button>
 			</div>
 
@@ -32,7 +99,7 @@
 			</div>
 
 			<div class="d-flex align-items-center position-absolute top-0 end-0 mt-4 me-4">
-				<a class="btn btn-link me-3 p-0 flip-button" href="index.php" style="font-size: 1.25rem;">home</a>
+				<a class="btn btn-link me-3 p-0" href="index.php" style="font-size: 1.25rem;">home</a>
 				<button class="btn btn-link p-0 flip-button" style="font-size: 1.25rem;">sign in</button>
 			</div>
 

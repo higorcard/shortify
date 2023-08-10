@@ -15,6 +15,8 @@ function hideAlert() {
 }
 
 $(window).ready(function() {
+	hideAlert();
+	
 	$(".flip-button").click(function() {
 		$("#card").toggleClass("flipped");
 	});

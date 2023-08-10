@@ -1,4 +1,14 @@
-<?php require_once 'partials/header.php'; ?>
+<?php
+	session_start();
+
+	if(isset($_GET['logged'])) {
+		echo "<div class='position-fixed z-3 bottom-0 start-50 translate-middle-x mt-3 row alert text-bg-primary shake-animation' role='alert'>Log in!</div>";
+	} elseif(isset($_GET['registered'])) {
+		echo "<div class='position-fixed z-3 bottom-0 start-50 translate-middle-x mt-3 row alert text-bg-success shake-animation' role='alert'>Welcome!</div>";
+	}
+
+	require_once 'partials/header.php';
+?>
 
 <div class="container mt-5">
 	<div class="row p-3 text-center justify-content-center flip-card" id="card">
@@ -9,8 +19,10 @@
 			</div>
 
 			<div class="d-flex align-items-center position-absolute top-0 end-0 mt-4 me-4">
-				<?php if(!$_SESSION['user_id']) : ?>
-					<a class="btn btn-link me-3 p-0 flip-button" href="login.php" style="font-size: 1.25rem;">log in</a>
+				<?php if($_SESSION['user_id']) : ?>
+					<a class="btn btn-link me-3 p-0" href="int/logout.php" style="font-size: 1.25rem;">log out</a>
+				<?php else : ?>
+					<a class="btn btn-link me-3 p-0" href="login.php" style="font-size: 1.25rem;">log in</a>
 				<?php endif; ?>
 				<button class="btn btn-link p-0 flip-button" style="font-size: 1.25rem;">track</button>
 			</div>
@@ -33,8 +45,10 @@
 			</div>
 
 			<div class="d-flex align-items-center position-absolute top-0 end-0 mt-4 me-4">
-				<?php if(!$_SESSION['user_id']) : ?>
-					<a class="btn btn-link me-3 p-0 flip-button" href="login.php" style="font-size: 1.25rem;">log in</a>
+				<?php if($_SESSION['user_id']) : ?>
+					<a class="btn btn-link me-3 p-0" href="int/logout.php" style="font-size: 1.25rem;">log out</a>
+				<?php else : ?>
+					<a class="btn btn-link me-3 p-0" href="login.php" style="font-size: 1.25rem;">log in</a>
 				<?php endif; ?>
 				<button class="btn btn-link p-0 flip-button" style="font-size: 1.25rem;">shorten</button>
 			</div>

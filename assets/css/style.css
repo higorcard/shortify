@@ -53,7 +53,7 @@ input::placeholder {
 }
 
 .shake-animation {
-	animation: shake .8s;
+	animation: shake 1s;
 }
 
 @media (max-width: 576px) {
@@ -99,9 +99,9 @@ input::placeholder {
 
 @keyframes shake {
 	0% { margin: 1rem -12px; }
-	20% { margin: 1rem 12px; }
-	40% { margin: 1rem -12px; }
-	60% { margin: 1rem 12px; }
-	80% { margin: 1rem -12px; }
-	100% { margin: 1rem 12px; }
+	20% { margin: 1rem 24px; }
+	40% { margin: 1rem -24px; }
+	60% { margin: 1rem 24px; }
+	80% { margin: 1rem -24px; }
+	100% { margin: 1rem -12px; }
 }
