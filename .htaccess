@@ -1,7 +1,9 @@
 RewriteEngine On
 
-RewriteCond %{REQUEST_URI} !^/assets/ [NC]
-
+RewriteRule ^int/ - [L,NC]
 RewriteCond %{REQUEST_URI} !^/index\.php$
 RewriteCond %{REQUEST_URI} !^/login\.php$
+
 RewriteRule ^([^/]+)/?$ int/redirect.php?link_code=$1 [L,QSA]
+
+RewriteRule ^([^/]+)/([^/]+)/?$ int/redirect.php?owner=$1&link_code=$2 [L,QSA]

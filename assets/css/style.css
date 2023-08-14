@@ -10,21 +10,21 @@ input::placeholder {
 	border-color: #0d6efd !important;
 }
 
-#track-link ul::-webkit-scrollbar {
+#track-link ul::-webkit-scrollbar, .card-front > ul::-webkit-scrollbar {
 	width: 8px;
 }
 
-#track-link ul::-webkit-scrollbar-thumb {
+#track-link ul::-webkit-scrollbar-thumb, .card-front > ul::-webkit-scrollbar-thumb {
 	border-radius: 8px;
 	background-color: #888;
 }
 
-#track-link ul::-webkit-scrollbar-track {
+#track-link ul::-webkit-scrollbar-track, .card-front > ul::-webkit-scrollbar-track{
 	border-radius: 8px;
 	background-color: #ececec;
 }
 
-#track-link ul li:last-child {
+#track-link ul li:last-child, .card-front ul li:last-child {
 	border-bottom: none !important;
 	padding-bottom: 0 !important;
 }
@@ -54,6 +54,18 @@ input::placeholder {
 
 .shake-animation {
 	animation: shake 1s;
+}
+
+.dropdown-toggle {
+	border: none !important;
+}
+
+.dropdown-toggle::after {
+	content: none;
+}
+
+.dropdown-menu {
+	margin-left: -130px !important;
 }
 
 @media (max-width: 576px) {

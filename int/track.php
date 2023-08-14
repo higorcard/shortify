@@ -1,4 +1,6 @@
 <?php
+	session_start();
+
   header('Content-Type: application/json');
 
 	require_once 'config.php';
@@ -6,10 +8,12 @@
 	$data = json_decode(file_get_contents('php://input'));
 
 	if($data->link_code) {
+		$user_id = $_SESSION['user_id'];
 		$short_code = filter_var($data->link_code, FILTER_SANITIZE_SPECIAL_CHARS);
 
-		$sql = $pdo->prepare("SELECT * FROM links WHERE short_code = :s_c");
+		$sql = $pdo->prepare("SELECT * FROM links WHERE short_code = :s_c AND (user_id = :u_i OR user_id IS NULL)");
 		$sql->bindValue(':s_c', $short_code);
+		$sql->bindValue(':u_i', $user_id);
 		$sql->execute();
 
 		$link = $sql->fetch(PDO::FETCH_ASSOC);
@@ -21,7 +25,7 @@
 
 			$redirects = $sql->fetchAll(PDO::FETCH_ASSOC);
 
-			$link['redirectsTotal'] = count($redirects);
+			$link['redirects_total'] = count($redirects);
 			$link['created_at'] = date('M d, Y - H:i', strtotime($link['created_at']));
 
 			foreach($redirects as $redirect) {

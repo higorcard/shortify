@@ -2,9 +2,15 @@
 	require_once 'config.php';
 
 	if($_GET['link_code']) {
-		$short_code = filter_input(INPUT_GET, 'link_code', FILTER_SANITIZE_SPECIAL_CHARS);
-
-		$sql = $pdo->prepare("SELECT * FROM links WHERE short_code = :s_c");
+		$short_code = urlencode(filter_input(INPUT_GET, 'link_code', FILTER_SANITIZE_SPECIAL_CHARS));
+		$owner = filter_input(INPUT_GET, 'owner', FILTER_SANITIZE_SPECIAL_CHARS);
+		
+		if($owner) {	
+			$sql = $pdo->prepare("SELECT * FROM links WHERE owner = :o AND short_code = :s_c");
+			$sql->bindValue(':o', $owner);
+		} else {
+			$sql = $pdo->prepare("SELECT * FROM links WHERE owner IS NULL AND short_code = :s_c");
+		}
 		$sql->bindValue(':s_c', $short_code);
 		$sql->execute();
 
