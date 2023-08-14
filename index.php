@@ -5,6 +5,8 @@
 		echo "<div class='position-fixed z-3 bottom-0 start-50 translate-middle-x mt-3 row alert text-bg-primary shake-animation' role='alert'>Log in!</div>";
 	} elseif(isset($_GET['registered'])) {
 		echo "<div class='position-fixed z-3 bottom-0 start-50 translate-middle-x mt-3 row alert text-bg-success shake-animation' role='alert'>Welcome!</div>";
+	} elseif(isset($_GET['logout'])) {
+		echo "<div class='position-fixed z-3 bottom-0 start-50 translate-middle-x mt-3 row alert text-bg-dark shake-animation' role='alert'>Log out!</div>";
 	}
 
 	require_once 'partials/header.php';
@@ -36,6 +38,7 @@
 			</form>
 
 			<div id="shorten-code"></div>
+			<div id="links-container"></div>
 		</div>
 
 		<div class="shortify-container bg-body-tertiary rounded-4 p-5 card-back">
@@ -57,7 +60,7 @@
 			<p class="fs-5 text-muted">Track link stats with ease using <code class="text-primary fw-bold">Shortify</code>!</p>
 
 			<form id="track-form" class="d-flex w-100 gap-2 mt-5 flex-md-row flex-column" method="POST" action="<?= $_SERVER['PHP_SELF'] ?>">
-				<input type="text" class="form-control px-4 rounded-pill" style="font-size: 1.25rem;" placeholder="short-code" minlength="6" maxlength="6" required>
+				<input type="text" class="form-control px-4 rounded-pill" style="font-size: 1.25rem;" placeholder="short-code" required>
 				<button class="btn btn-primary btn-lg text-white text-center align-items-center px-4 rounded-pill" type="submit">Track!</button>
 			</form>
 
@@ -65,5 +68,44 @@
 		</div>
 	</div>
 </div>
+
+<form class="modal fade" id="edit-modal" method="POST" action="<?= $_SERVER['PHP_SELF'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-4" id="exampleModalLabel">Edit shortened link</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+				<input type="hidden" name="link_id">
+				<label for="short_code" class="form-label">Short code</label>
+				<input type="text" name="short_code" id="short_code" class="form-control" placeholder="Personalized short link" value="" require>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" name="delete_link" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<form class="modal fade" id="delete-modal" method="POST" action="<?= $_SERVER['PHP_SELF'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-4" id="exampleModalLabel">Delete shortened link</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+				<input type="hidden" name="link_id">
+				<p class="fs-5">Are you sure you want to delete this shortened link?<br> This action <span class="text-decoration-underline">cannot be undone</span>.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" name="delete_link" class="btn btn-danger">Confirm</button>
+      </div>
+    </div>
+  </div>
+</form>
 
 <?php require_once 'partials/footer.php'; ?>
