@@ -1,9 +1,9 @@
 <?php
   $database = (object) [
-		'dbname' => 'shortify',
-		'host' => 'mysql',
-		'username' => 'root',
-		'password' => 'shortify_db_pass',
+		'dbname' => 'DB_NAME',
+		'host' => 'HOSTNAME',
+		'username' => 'USERNAME',
+		'password' => 'PASSWORD',
 	];
 
 	try {

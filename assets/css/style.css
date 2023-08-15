@@ -65,7 +65,7 @@ input::placeholder {
 }
 
 .dropdown-menu {
-	margin-left: -130px !important;
+	margin-left: -80px !important;
 }
 
 @media (max-width: 576px) {
@@ -91,6 +91,10 @@ input::placeholder {
 	}
 	.shortify-container form {
 		margin-top: 1.75rem !important;
+	}
+	.alert {
+    padding: 10px !important;
+		width: fit-content !important;
 	}
 }
 @media (min-width: 768px) {

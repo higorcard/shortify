@@ -35,7 +35,7 @@ function getLinks() {
 
 				var owner = (e['owner'] != null && e['owner'] != '') ? e['owner'] + '/' : '';
 
-				$('#links-container > ul').append("<li class='link-item d-flex flex-column text-secondary fs-5 border-bottom py-3 me-2' data-link-id='" + e['id'] + "'><div class='d-flex justify-content-between'><span class='d-flex'><i class='bi bi-link-45deg d-flex align-items-center me-2' style='height: 30px;'></i><a class='text-dark-emphasis mb-1' style='overflow-wrap: anywhere;' href='" + absolutePath + "/" + owner + e['short_code'] + "' target='_blank'>" +  hostname + "/" + owner + "<b>" + e['short_code'] + "</b></a></span><div class='dropdown' style='position: initial;'><button class='btn p-2 dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'><i class='bi bi-three-dots-vertical' style='font-size: 1.1rem;'></i></button><ul class='dropdown-menu'><li><a class='dropdown-item copy-link-btn'>copy</a></li><li><a class='dropdown-item edit-link-btn' data-bs-toggle='modal' data-bs-target='#edit-modal'>edit</a></li><li><a class='dropdown-item delete-link-btn' data-bs-toggle='modal' data-bs-target='#delete-modal'>delete</a></li></ul></div></div><p class='mb-0' style='margin-left: 26px;'>" + redirectsTotal + "</p></li>");
+				$('#links-container > ul').append("<li class='link-item d-flex flex-column text-secondary fs-5 border-bottom py-3 me-2' data-link-id='" + e['id'] + "'><div class='d-flex justify-content-between'><span class='d-flex'><i class='bi bi-link-45deg d-flex align-items-center me-2' style='height: 30px;'></i><a class='text-dark-emphasis mb-1' style='overflow-wrap: anywhere;' href='" + absolutePath + "/" + owner + e['short_code'] + "' target='_blank'>" +  hostname + "/" + owner + "<b>" + e['short_code'] + "</b></a></span><div class='dropdown' style='position: initial;'><button class='btn p-2 dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'><i class='bi bi-three-dots-vertical' style='font-size: 1.1rem;'></i></button><ul class='dropdown-menu' style='min-width: 7rem;'><li><a class='dropdown-item copy-link-btn'>copy</a></li><li><a class='dropdown-item track-link-btn'>track</a></li><li><a class='dropdown-item edit-link-btn' data-bs-toggle='modal' data-bs-target='#edit-modal'>edit</a></li><li><a class='dropdown-item delete-link-btn' data-bs-toggle='modal' data-bs-target='#delete-modal'>delete</a></li></ul></div></div><p class='mb-0' style='margin-left: 26px;'>" + redirectsTotal + "</p></li>");
 			});
 
 			$('#links-container .dropdown-menu').css('margin-left', '-130px');
@@ -53,6 +53,16 @@ function getLinks() {
 					tempInput.remove();
 	
 					showAlert('Copied link!');
+				});
+			});
+
+			$('.track-link-btn').each(function(e) {
+				$(this).click(function() {
+					var shortCode = $(this).parents('.link-item').find('a b').text();
+
+					$('#track-form input').val(shortCode);
+					$('#track-form').submit();
+					$('#card').toggleClass('flipped');
 				});
 			});
 
@@ -79,6 +89,7 @@ function getLinks() {
 
 $(window).ready(function() {
 	getLinks();
+	
 	hideAlert();
 	
 	$(".flip-button").click(function() {
@@ -157,7 +168,7 @@ $(window).ready(function() {
 
 			var owner = (link['owner'] != null && link['owner'] != '') ? link['owner'] + '/' : '';
 			
-			$('#track-link').html("<div class='d-flex align-items-start flex-column w-100 mt-5'><span class='badge rounded-pill text-bg-primary mb-3' style='font-size: 1rem;'>" + redirectsTotal + " <span class='mx-2'>·</span> " + link['created_at'] + "</span><a class='fs-4 mb-1' href='" + absolutePath + "/" + owner + link['short_code'] + "' target='_blank'>" +  hostname + "/" + owner + "<b>" + link['short_code'] + "</b></a><p class='text-secondary text-start'>" + link['original_url'] + "</p></div>");
+			$('#track-link').html("<div class='d-flex align-items-start flex-column text-start w-100 mt-5' style='overflow-wrap: anywhere;'><span class='badge rounded-pill text-bg-primary mb-3' style='font-size: 1rem;'>" + redirectsTotal + " <span class='mx-2'>·</span> " + link['created_at'] + "</span><a class='fs-4 mb-1' href='" + absolutePath + "/" + owner + link['short_code'] + "' target='_blank'>" +  hostname + "/" + owner + "<b>" + link['short_code'] + "</b></a><p class='text-secondary text-start'>" + link['original_url'] + "</p></div>");
 
 			if(link['redirects_total'] > 0) {
 				$('#track-link').append("<ul class='text-start mb-0' style='max-height: 300px; overflow: auto; list-style: none; padding-left: 0;'></ul>");
@@ -175,7 +186,7 @@ $(window).ready(function() {
 		e.preventDefault();
 
 		var linkId = $(this).find('input[name=link_id]').val();
-		var shortCode = $(this).find('input[name=short_code]').val();
+		var shortCode = $(this).find('input[name=short_code]').val().replaceAll('/', '-');
 		$(this).find('.btn-close').click();
 
 		$.ajax({
