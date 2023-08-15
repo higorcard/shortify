@@ -2,12 +2,12 @@ services:
   php-apache2:
     build:
       args:
-        user: USERNAME_HERE
+        user: john-doe
         uid: 1000
       context: .
       dockerfile: Dockerfile
-    image: IMAGE_NAME-php-apache2
-    container_name: IMAGE_NAME-php-apache2
+    image: shortify-php-apache2
+    container_name: shortify-php-apache2
     ports:
       - 80:80 
     restart: unless-stopped
@@ -15,12 +15,12 @@ services:
     volumes:
       - .:/var/www/html
     networks:
-      - NETWORK_NAME
+      - shortify
 
   mysql:
     image: mysql:8
     command: --default-authentication-plugin=mysql_native_password --sql-mode=
-    container_name: IMAGE_NAME-mysql
+    container_name: shortify-mysql
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
@@ -33,7 +33,7 @@ services:
     ports:
       - 3306:3306
     networks:
-      - NETWORK_NAME
+      - shortify
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
@@ -44,8 +44,8 @@ services:
       PMA_HOST: mysql:3306
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     networks:
-      - NETWORK_NAME
+      - shortify
 
 networks:
-  NETWORK_NAME:
+  shortify:
     driver: bridge
