@@ -35,7 +35,13 @@ cd Shortify
 ```shell
 sudo docker-compose up -d
 ```
-4. Access Shortify by navigating to http://localhost in your web browser.
+4. Access http://localhost:8080 in your web browser.
+  - Username: **root**
+  - Password: (use the password defined in your **.env file**)
+
+5. Once logged in, import the **'shortify.sql'** file through the phpMyAdmin panel.
+   
+6. Access Shortify by navigating to http://localhost in your web browser.
 
 ## Usage
 
