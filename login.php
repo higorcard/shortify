@@ -13,7 +13,7 @@
 		echo "<div class='position-fixed z-3 bottom-0 start-50 translate-middle-x mt-3 row alert text-bg-warning shake-animation' role='alert'>Username or e-mail already in use :(</div>";
 	}
 	
-	if(isset($_POST['sign-in'], $_POST['email'], $_POST['password'])) {
+	if(isset($_POST['sign-in'], $_POST['email'], $_POST['password']) && strlen($_POST['password']) >= 8) {
 		$email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 		$password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -32,7 +32,7 @@
 		}
 	}
 	
-	if(isset($_POST['sign-up'], $_POST['username'], $_POST['email'], $_POST['password'])) {
+	if(isset($_POST['sign-up'], $_POST['username'], $_POST['email'], $_POST['password']) && strlen($_POST['username']) >= 3 && strlen($_POST['password']) >= 8) {
 		$username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_SPECIAL_CHARS);
 		$email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 		$password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -85,7 +85,7 @@
 			
 			<form id="sign-in" class="d-flex w-100 gap-2 mt-5 flex-column" method="POST" action="<?= $_SERVER['PHP_SELF'] ?>">
 				<input type="email" name="email" class="form-control rounded-pill px-4" style="font-size: 1.25rem;" placeholder="E-mail" required>
-				<input type="password" name="password" class="form-control rounded-pill px-4" style="font-size: 1.25rem;" placeholder="Password" required>
+				<input type="password" name="password" class="form-control rounded-pill px-4" style="font-size: 1.25rem;" placeholder="Password" minlength="8" required>
 				<button class="btn btn-primary btn-lg text-white text-center align-items-center mt-3 px-4 rounded-pill" name="sign-in" type="submit">Join!</button>
 			</form>
 
@@ -107,9 +107,9 @@
 			<p class="fs-5 text-muted">Join now and start creating <code class="text-primary fw-bold">personalized</code> short links!</p>
 
 			<form id="sign-up" class="d-flex w-100 gap-2 mt-5 flex-column" method="POST" action="<?= $_SERVER['PHP_SELF'] ?>">
-				<input type="text" name="username" class="form-control rounded-pill px-4" style="font-size: 1.25rem;" placeholder="Username" required>
+				<input type="text" name="username" class="form-control rounded-pill px-4" style="font-size: 1.25rem;" placeholder="Username" minlength="3" required>
 				<input type="email" name="email" class="form-control rounded-pill px-4" style="font-size: 1.25rem;" placeholder="E-mail" required>
-				<input type="password" name="password" class="form-control rounded-pill px-4" style="font-size: 1.25rem;" placeholder="Password" required>
+				<input type="password" name="password" class="form-control rounded-pill px-4" style="font-size: 1.25rem;" placeholder="Password" minlength="8" required>
 				<button class="btn btn-primary btn-lg text-white text-center align-items-center mt-3 px-4 rounded-pill" type="submit" name="sign-up">Join!</button>
 			</form>
 
