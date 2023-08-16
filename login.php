@@ -6,7 +6,7 @@
 	if($_SESSION['user_id']) {
 		header('Location: /');
 	}
-
+	
 	if(isset($_GET['fail-sign-in'])) {
 		echo "<div class='position-fixed z-3 bottom-0 start-50 translate-middle-x mt-3 row alert text-bg-danger shake-animation' role='alert'>E-mail or password incorrect!</div>";
 	} elseif(isset($_GET['fail-sign-up'])) {
