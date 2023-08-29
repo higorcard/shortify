@@ -1,29 +1,29 @@
 <?php
 	session_start();
 
-	require_once 'int/config.php';
+	require_once $_SERVER['DOCUMENT_ROOT'] . '/int/config.php';
+	require_once $_SERVER['DOCUMENT_ROOT'] . '/int/functions.php';
+	require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/User.php';
 
-	if($_SESSION['user_id']) {
+	if($user_id) {
 		header('Location: /');
 	}
 	
 	if(isset($_GET['fail-sign-in'])) {
-		echo "<div class='position-fixed z-3 bottom-0 start-50 translate-middle-x mt-3 row alert text-bg-danger shake-animation' role='alert'>E-mail or password incorrect!</div>";
-	} elseif(isset($_GET['fail-sign-up'])) {
-		echo "<div class='position-fixed z-3 bottom-0 start-50 translate-middle-x mt-3 row alert text-bg-warning shake-animation' role='alert'>Username or e-mail already in use :(</div>";
+		showAlert('danger', 'E-mail or password incorrect!');
+	} elseif(isset($_GET['fail-username'])) {
+		showAlert('warning', 'Username already in use :(');
+	} elseif(isset($_GET['fail-email'])) {
+		showAlert('warning', 'E-mail already in use :(');
 	}
 	
 	if(isset($_POST['sign-in'], $_POST['email'], $_POST['password']) && strlen($_POST['password']) >= 8) {
 		$email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 		$password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
 
-		$sql = $pdo->prepare("SELECT * FROM users WHERE email = :e");
-		$sql->bindValue(':e', $email);
-		$sql->execute();
-
-		$user = $sql->fetch(PDO::FETCH_ASSOC);
+		$user = User::get($email);
 		
-		if($sql->rowCount() > 0 && password_verify($password, $user['password'])) {
+		if($user && password_verify($password, $user['password'])) {
 			$_SESSION['user_id'] = $user['id'];
 			
 			header('Location: ../?logged');
@@ -34,44 +34,36 @@
 	
 	if(isset($_POST['sign-up'], $_POST['username'], $_POST['email'], $_POST['password']) && strlen($_POST['username']) >= 3 && strlen($_POST['password']) >= 8) {
 		$username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_SPECIAL_CHARS);
+		$username = str_replace(' ', '_', strtolower($username));
 		$email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 		$password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
 		$password = password_hash($password, PASSWORD_DEFAULT);
 
-		$sql = $pdo->prepare("SELECT * FROM users WHERE username = :u OR email = :e");
-		$sql->bindValue(':u', $username);
-		$sql->bindValue(':e', $email);
-		$sql->execute();
+		$userExists = User::userExists($username, $email);
 
-		$user = $sql->fetch(PDO::FETCH_ASSOC);
+		if($userExists == false) {
+			$user_id = User::create($username, $email, $password);
 
-		if($sql->rowCount() == 0) {
-			$sql = $pdo->prepare("INSERT INTO users (username, email, password) VALUES (:u, :e, :p)");
-			$sql->bindValue(':u', $username);
-			$sql->bindValue(':e', $email);
-			$sql->bindValue(':p', $password);
-			$sql->execute();
-
-			if($sql->rowCount() > 0) {
-				$_SESSION['user_id'] = $pdo->lastInsertId();
+			if($user_id) {
+				$_SESSION['user_id'] = $user_id;
 				
 				header('Location: ../?registered');
 			}
-		} elseif($user['username'] == $username) {
+		} elseif($userExists == 'username') {
 			header('Location: ?fail-username');
-		} elseif($user['email'] == $email) {
+		} elseif($userExists == 'email') {
 			header('Location: ?fail-email');
 		}
 	}
 
-	require_once 'partials/header.php';
+	require_once $_SERVER['DOCUMENT_ROOT'] . '/partials/header.php';
 ?>
 
 <div class="container mt-5">
 	<div class="row p-3 text-center justify-content-center flip-card" id="card">
 		<div class="shortify-container bg-body-tertiary rounded-4 p-5 card-front">
 			<div class="d-flex align-items-center position-absolute top-0 start-0 mt-4 ms-4">
-				<img src="assets/img/repository-logo.png" style="width: 28px; heigth: 28px;">
+				<img src="assets/img/repository-logo.png" style="width: 28px; height: 28px;">
 				<h4 class="text-primary m-0 ms-2">Shortify</h4>
 			</div>
 
@@ -94,7 +86,7 @@
 
 		<div class="shortify-container bg-body-tertiary rounded-4 p-5 card-back">
 			<div class="d-flex align-items-center position-absolute top-0 start-0 mt-4 ms-4">
-				<img src="assets/img/repository-logo.png" style="width: 28px; heigth: 28px;">
+				<img src="assets/img/repository-logo.png" style="width: 28px; height: 28px;">
 				<h4 class="text-primary m-0 ms-2">Shortify</h4>
 			</div>
 
@@ -118,4 +110,4 @@
 	</div>
 </div>
 
-<?php require_once 'partials/footer.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/partials/footer.php'; ?>

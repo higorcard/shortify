@@ -1,25 +1,20 @@
 <?php
-	require_once 'config.php';
+	require_once $_SERVER['DOCUMENT_ROOT'] . '/int/config.php';
+	require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/Link.php';
+	require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/Redirect.php';
 
 	if($_GET['link_code']) {
 		$short_code = urlencode(filter_input(INPUT_GET, 'link_code', FILTER_SANITIZE_SPECIAL_CHARS));
 		$owner = filter_input(INPUT_GET, 'owner', FILTER_SANITIZE_SPECIAL_CHARS);
 		
-		if($owner) {	
-			$sql = $pdo->prepare("SELECT * FROM links WHERE owner = :o AND short_code = :s_c");
-			$sql->bindValue(':o', $owner);
+		if($owner) {
+			$link = DB::table('links')->where('owner', '=', $owner)->where('short_code', '=', $short_code)->get()[0];
 		} else {
-			$sql = $pdo->prepare("SELECT * FROM links WHERE owner IS NULL AND short_code = :s_c");
+			$link = DB::raw("SELECT * FROM links WHERE owner IS NULL AND short_code = :short_code", ['short_code' => $short_code])->fetch(PDO::FETCH_ASSOC);
 		}
-		$sql->bindValue(':s_c', $short_code);
-		$sql->execute();
 
-		$link = $sql->fetch(PDO::FETCH_ASSOC);
-
-		if($sql->rowCount() > 0) {
-			$sql = $pdo->prepare("INSERT INTO redirects (link_id) VALUES (:l_i)");
-			$sql->bindValue(':l_i', $link['id']);
-			$sql->execute();
+		if($link) {
+			Redirect::add($link['id']);
 
 			header('Location: ' . $link['original_url']);
 		} else {

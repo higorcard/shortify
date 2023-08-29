@@ -1,22 +1,24 @@
 <?php
 	session_start();
 
+	require_once $_SERVER['DOCUMENT_ROOT'] . '/int/functions.php';
+
 	if(isset($_GET['logged'])) {
-		echo "<div class='position-fixed z-3 bottom-0 start-50 translate-middle-x mt-3 row alert text-bg-primary shake-animation' role='alert'>Log in!</div>";
+		showAlert('primary', 'Log in!');
 	} elseif(isset($_GET['registered'])) {
-		echo "<div class='position-fixed z-3 bottom-0 start-50 translate-middle-x mt-3 row alert text-bg-success shake-animation' role='alert'>Welcome!</div>";
+		showAlert('success', 'Welcome!');
 	} elseif(isset($_GET['logout'])) {
-		echo "<div class='position-fixed z-3 bottom-0 start-50 translate-middle-x mt-3 row alert text-bg-dark shake-animation' role='alert'>Log out!</div>";
+		showAlert('dark', 'Log out!');
 	}
 
-	require_once 'partials/header.php';
+	require_once $_SERVER['DOCUMENT_ROOT'] . '/partials/header.php';
 ?>
 
 <div class="container mt-5">
 	<div class="row p-3 text-center justify-content-center flip-card" id="card">
 		<div class="shortify-container bg-body-tertiary rounded-4 p-5 card-front">
 			<div class="d-flex align-items-center position-absolute top-0 start-0 mt-4 ms-4">
-				<img src="assets/img/repository-logo.png" style="width: 28px; heigth: 28px;">
+				<img src="assets/img/repository-logo.png" style="width: 28px; height: 28px;">
 				<h4 class="text-primary m-0 ms-2">Shortify</h4>
 			</div>
 
@@ -43,7 +45,7 @@
 
 		<div class="shortify-container bg-body-tertiary rounded-4 p-5 card-back">
 			<div class="d-flex align-items-center position-absolute top-0 start-0 mt-4 ms-4">
-				<img src="assets/img/repository-logo.png" style="width: 28px; heigth: 28px;">
+				<img src="assets/img/repository-logo.png" style="width: 28px; height: 28px;">
 				<h4 class="text-primary m-0 ms-2">Shortify</h4>
 			</div>
 
@@ -108,4 +110,4 @@
   </div>
 </form>
 
-<?php require_once 'partials/footer.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/partials/footer.php'; ?>

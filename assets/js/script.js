@@ -1,9 +1,9 @@
 const absolutePath = window.location.origin;
 const hostname = window.location.hostname;
 
-function showAlert(message) {
+function showAlert(type = 'primary', message) {
 	if(!$('body').find('.alert').length) {
-		$('body').prepend("<div class='position-fixed z-3 bottom-0 start-50 translate-middle-x mt-3 row alert text-bg-primary shake-animation' role='alert'>" + message + "</div>");
+		$('body').prepend("<div class='position-fixed z-3 bottom-0 start-50 translate-middle-x mt-3 row alert text-bg-" + type + " shake-animation' role='alert'>" + message + "</div>");
 
 		hideAlert();
 	}
@@ -123,7 +123,7 @@ $(window).ready(function() {
 
 			getLinks();
 
-			showAlert('Shortened link created!');
+			showAlert('success', 'Shortened link created!');
 
 			$("#copyLink").click(function() {
 				var textToCopy = $("#finalLink").attr('href');
@@ -159,7 +159,7 @@ $(window).ready(function() {
 			}),
 		}).done(function(link) {
 			showAlert('Tracked link!');
-
+		
 			if(link['redirects_total'] > 1) {
 				var redirectsTotal = link['redirects_total'] + ' redirects';
 			} else {
@@ -197,12 +197,14 @@ $(window).ready(function() {
 				link_id: linkId,
 				short_code: shortCode,
 			}),
-		}).done(function() {
-			getLinks();
-
-			showAlert('Link edited!');
-		}).fail(function() {
-			showAlert('Fail to edit!');
+		}).done(function(response) {
+			if(response) {
+				getLinks();
+	
+				showAlert('success', 'Link edited!');
+			} else {
+				showAlert('danger', 'Fail to edit!');
+			}
 		});
 	});
 
@@ -219,12 +221,14 @@ $(window).ready(function() {
 			data: JSON.stringify({
 				link_id: linkId,
 			}),
-		}).done(function() {
-			getLinks();
-
-			showAlert('Link deleted!');
-		}).fail(function() {
-			showAlert('Fail to delete!');
-		})
+		}).done(function(response) {
+			if(response) {
+				getLinks();
+	
+				showAlert('success', 'Link deleted!');
+			} else {
+				showAlert('danger', 'Fail to delete!');
+			}
+		});
 	});
 });

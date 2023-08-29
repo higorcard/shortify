@@ -1,7 +1,7 @@
 # Shortify
 ![Blogit Banner](assets/img/repository-banner.png)
 
-Welcome to Shortify, a powerful and user-friendly URL shortener built using Vanilla PHP and AJAX. In addition to standard link shortening, Shortify offers advanced features such as link tracking, user authentication, registration, and the ability to edit or delete created links. Even without registration, users can conveniently shorten generic links.
+Welcome to Shortify, a powerful and user-friendly URL shortener built using Vanilla PHP OO and AJAX. In addition to standard link shortening, Shortify offers advanced features such as link tracking, user authentication, registration, and the ability to edit or delete created links. Even without registration, users can conveniently shorten generic links.
 
 ## Features
 - **URL Shortening:** Easily convert long URLs into short, shareable links.
