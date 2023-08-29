@@ -3,20 +3,15 @@
 
   header('Content-Type: application/json');
 
-	require_once 'config.php';
+	require_once $_SERVER['DOCUMENT_ROOT'] . '/int/config.php';
+	require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/Link.php';
 
 	$data = json_decode(file_get_contents('php://input'));
 
 	if($data->link_id) {
-		$user_id = $_SESSION['user_id'];
 		$link_id = filter_var($data->link_id, FILTER_SANITIZE_NUMBER_INT);
 
-		$sql = $pdo->prepare("DELETE FROM links WHERE id = :l_i AND user_id = :u_i");
-		$sql->bindValue(':l_i', $link_id);
-		$sql->bindValue(':u_i', $user_id);
-		$sql->execute();
+		$result = Link::delete($user_id, $link_id);
 		
-		if($sql->rowCount() > 0) {
-			echo json_encode('success');
-		}
+		echo json_encode($result);
 	}
